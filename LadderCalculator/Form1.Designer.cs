@@ -34,9 +34,9 @@
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.analyzeButton = new System.Windows.Forms.Button();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.onlyUniqueCheckBox = new System.Windows.Forms.CheckBox();
             this.onlySavedCheckBox = new System.Windows.Forms.CheckBox();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
@@ -123,10 +123,6 @@
             this.analyzeButton.UseVisualStyleBackColor = true;
             this.analyzeButton.Click += new System.EventHandler(this.button2_Click);
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.Filter = "CalcyIV Export files|*.csv|All files|*.*";
-            // 
             // onlyUniqueCheckBox
             // 
             this.onlyUniqueCheckBox.AutoSize = true;
@@ -150,6 +146,10 @@
             this.onlySavedCheckBox.Text = "Only Show Saved Pokemon";
             this.onlySavedCheckBox.UseVisualStyleBackColor = true;
             this.onlySavedCheckBox.CheckedChanged += new System.EventHandler(this.onlySavedCheckBox_CheckedChanged);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.Filter = "CalcyIV Export files|*.csv|All files|*.*";
             // 
             // Form1
             // 

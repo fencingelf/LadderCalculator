@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace PokemonGoLib
 {
-    public static class Data
+    public class Data
     {
-        public static Dictionary<double, Level> Levels { get; set; }
-        public static Dictionary<string, Species> SpeciesData { get; set; }
-        public static List<Family> Families { get; set; }
-        static Data()
+        public SerializableDictionary<double, Level> Levels { get; set; }
+        public SerializableDictionary<string, Species> SpeciesData { get; set; }
+        public List<Family> Families { get; set; }
+        /*public Data()
         {
-            Levels = new Dictionary<double, Level>();
+            Levels = new SerializableDictionary<double, Level>();
             Levels.Add(1, new Level { LevelID = 1, CPMultiplier = 0.094, Candy = 1, Stardust = 200 });
             Levels.Add(1.5, new Level { LevelID = 1.5, CPMultiplier = 0.135137432, Candy = 1, Stardust = 200 });
             Levels.Add(2, new Level { LevelID = 2, CPMultiplier = 0.16639787, Candy = 1, Stardust = 200 });
@@ -94,7 +96,7 @@ namespace PokemonGoLib
             Levels.Add(39.5, new Level { LevelID = 39.5, CPMultiplier = 0.787473608, Candy = 15, Stardust = 10000 });
             Levels.Add(40, new Level { LevelID = 40, CPMultiplier = 0.7903, Candy = 0, Stardust = 0 });
 
-            SpeciesData = new Dictionary<string, Species>();
+            SpeciesData = new SerializableDictionary<string, Species>();
 
             SpeciesData.Add("Bulbasaur", new Species { PokedexNumber = 1, Name = "Bulbasaur", BaseStamina = 128, BaseAttack = 118, BaseDefense = 111 });
             SpeciesData.Add("Ivysaur", new Species { PokedexNumber = 2, Name = "Ivysaur", BaseStamina = 155, BaseAttack = 151, BaseDefense = 143 });
@@ -1023,6 +1025,32 @@ namespace PokemonGoLib
             Families.Add(new Family { Basic = "Deino", FirstEvolution = new List<string> { "Zweilous" }, SecondEvolution = new List<string> { "Hydreigon" } });
             Families.Add(new Family { Basic = "Larvesta", FirstEvolution = new List<string> { "Volcarona" } });
 
+        }*/
+
+        public static Data LoadedData { get; set; }
+
+        public static void LoadData(string fileName)
+        {
+            if (File.Exists(fileName))
+            {
+                using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                {
+                    XmlSerializer xms = new XmlSerializer(typeof(Data));
+                    LoadedData = (Data)xms.Deserialize(fs);
+                }
+            }else
+            {
+                throw new FileNotFoundException("Required Pokemon GO Data file PokemonGoData.xml not found!");
+            }
+        }
+
+        public static void SaveData(string fileName)
+        {
+            using (FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                XmlSerializer xms = new XmlSerializer(typeof(Data));
+                xms.Serialize(fs, LoadedData);
+            }
         }
     }
 }

@@ -24,9 +24,9 @@ namespace PokemonGoLib
             CurrentLevel = level;
             Saved = saved;
             Appraised = appraised;
-            if (Data.SpeciesData.ContainsKey(speciesName))
+            if (Data.LoadedData.SpeciesData.ContainsKey(speciesName))
             {
-                Species = Data.SpeciesData[speciesName];
+                Species = Data.LoadedData.SpeciesData[speciesName];
             }
             else
             {
@@ -53,9 +53,9 @@ namespace PokemonGoLib
                     speciesNameTmp = speciesNameTmp.Replace("West Sea", "").Replace("East Sea", "").Trim();
                 }
 
-                if (Data.SpeciesData.ContainsKey(speciesNameTmp))
+                if (Data.LoadedData.SpeciesData.ContainsKey(speciesNameTmp))
                 {
-                    Species = Data.SpeciesData[speciesNameTmp];
+                    Species = Data.LoadedData.SpeciesData[speciesNameTmp];
                 }
             }
             if (Species == null)
@@ -84,19 +84,19 @@ namespace PokemonGoLib
             List<Species> evo1 = new List<Species>();
             List<Species> evo2 = new List<Species>();
 
-            foreach (var fam in Data.Families)
+            foreach (var fam in Data.LoadedData.Families)
             {
                 if (fam.Basic == Species.Name)
                 {
                     if (fam.FirstEvolution != null)
                     {
                         foreach (var evo in fam.FirstEvolution)
-                            evo1.Add(Data.SpeciesData[evo]);
+                            evo1.Add(Data.LoadedData.SpeciesData[evo]);
                     }
                     if (fam.SecondEvolution != null)
                     {
                         foreach (var evo in fam.SecondEvolution)
-                            evo2.Add(Data.SpeciesData[evo]);
+                            evo2.Add(Data.LoadedData.SpeciesData[evo]);
                     }
                 }
                 if (fam.FirstEvolution.Contains(Species.Name))
@@ -104,7 +104,7 @@ namespace PokemonGoLib
                     if (fam.SecondEvolution != null)
                     {
                         foreach (var evo in fam.SecondEvolution)
-                            evo1.Add(Data.SpeciesData[evo]);
+                            evo1.Add(Data.LoadedData.SpeciesData[evo]);
                     }
                 }
             }
@@ -122,8 +122,8 @@ namespace PokemonGoLib
                     ret.Add(new PowerUp(this, evo.CP(level, AttackBonus, DefenseBonus, StaminaBonus), levelUps, candy, stardust, 2));
                 }
 
-                candy += Data.Levels[level].Candy;
-                stardust += Data.Levels[level].Stardust;
+                candy += Data.LoadedData.Levels[level].Candy;
+                stardust += Data.LoadedData.Levels[level].Stardust;
                 level += 0.5;
                 levelUps++;
             }
@@ -140,12 +140,12 @@ namespace PokemonGoLib
             }
 
             var familyData = Family.FamilyData.NotInFamily;
-            var fam = Data.Families.FirstOrDefault(f => (familyData = f.HasPokemon(Species.Name)) != Family.FamilyData.NotInFamily);
+            var fam = Data.LoadedData.Families.FirstOrDefault(f => (familyData = f.HasPokemon(Species.Name)) != Family.FamilyData.NotInFamily);
 
             if (familyData.HasFlag(Family.FamilyData.HasFirstEvolution))
             {
                 foreach (var evo in fam.FirstEvolution)
-                    if (Data.SpeciesData[evo].CanBeCP(cp, CurrentLevel, AttackBonus, DefenseBonus, StaminaBonus, out numberOfPowerups))
+                    if (Data.LoadedData.SpeciesData[evo].CanBeCP(cp, CurrentLevel, AttackBonus, DefenseBonus, StaminaBonus, out numberOfPowerups))
                     {
                         evolveName = evo;
                         return true;
@@ -154,7 +154,7 @@ namespace PokemonGoLib
             if (familyData.HasFlag(Family.FamilyData.HasSecondEvolution))
             {
                 foreach (var evo in fam.SecondEvolution)
-                    if (Data.SpeciesData[evo].CanBeCP(cp, CurrentLevel, AttackBonus, DefenseBonus, StaminaBonus, out numberOfPowerups))
+                    if (Data.LoadedData.SpeciesData[evo].CanBeCP(cp, CurrentLevel, AttackBonus, DefenseBonus, StaminaBonus, out numberOfPowerups))
                     {
                         evolveName = evo;
                         return true;

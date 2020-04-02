@@ -17,9 +17,11 @@ namespace PokemonGoLib
 
         public int CP(double level, int atk, int def, int hp)
         {
-            var levelCPBonus = Data.Levels.ContainsKey(level) ? Data.Levels[level].CPMultiplier : 0;
-            return (int)Math.Floor(((BaseAttack + atk) * Math.Sqrt(BaseDefense + def) * Math.Sqrt(BaseStamina + hp) *
+            var levelCPBonus = Data.LoadedData.Levels.ContainsKey(level) ? Data.LoadedData.Levels[level].CPMultiplier : 0;
+            var cp= (int)Math.Floor(((BaseAttack + atk) * Math.Sqrt(BaseDefense + def) * Math.Sqrt(BaseStamina + hp) *
             Math.Pow(levelCPBonus, 2)) / 10.0);
+            if (cp < 10) return 10;
+            return cp;
         }
 
         public bool CanBeCP(int cp, double startingLevel, int atk, int def, int hp, out int numberOfPowerups)
