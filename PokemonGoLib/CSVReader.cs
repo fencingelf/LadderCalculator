@@ -23,6 +23,9 @@ namespace PokemonGoLib
             Error = "";
             var lines = File.ReadAllLines(FileName);
 
+            int ancestorField = -1;
+            int uniqueField = -1;
+            int savedField = -1;
             int speciesNameField = -1;
             int atkField = -1;
             int defField = -1;
@@ -34,11 +37,14 @@ namespace PokemonGoLib
 
             while (index < header.Length)
             {
+                if (header[index] == "Ancestor?") { ancestorField = index; }
                 if (header[index] == "Name") { speciesNameField = index; }
                 if (header[index] == "Level") { levelField = index; }
                 if (header[index] == "ØATT IV") { atkField = index; }
                 if (header[index] == "ØDEF IV") { defField = index; }
                 if (header[index] == "ØHP IV") { stamField = index; }
+                if (header[index] == "Unique?") { uniqueField = index; }
+                if (header[index] == "Saved") { savedField = index; }
                 index++;
             }
 
@@ -56,10 +62,21 @@ namespace PokemonGoLib
             string speciesName;
             double level = 0;
             int atk = 0, def = 0, hp = 0;
+            bool saved = true, appraised = true;
 
             for (int ii = 1; ii < lines.Length; ++ii)
             {
                 var line = lines[ii].Split(',');
+
+                if (ancestorField >= 0 && int.Parse(line[ancestorField]) == 1) { continue; }
+                if (savedField >= 0)
+                {
+                    saved = int.Parse(line[savedField]) == 1;
+                }else { saved = true; }
+                if (uniqueField >= 0)
+                {
+                    appraised = int.Parse(line[uniqueField]) == 1;
+                }else { appraised = true; }
 
                 speciesName = line[speciesNameField];
                 try
@@ -74,7 +91,7 @@ namespace PokemonGoLib
                     Console.WriteLine($"Error on line {ii}, could not parse one of the essential fields!");
                 }
 
-                var poke = new PokemonGoLib.Pokemon(speciesName, level, atk, def, hp);
+                var poke = new PokemonGoLib.Pokemon(speciesName, level, atk, def, hp, saved, appraised);
                 output.Add(poke);
                 ProgressChangedEvent?.Invoke(this, new CSVReadProgress { ReadLines = ii, TotalLines = lines.Length });
             }

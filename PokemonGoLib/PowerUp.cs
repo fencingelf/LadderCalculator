@@ -6,18 +6,17 @@ namespace PokemonGoLib
 {
     public class PowerUp
     {
-        public string Name { get; set; }
-        public int CurrentCP { get; set; }
+        public Pokemon Pokemon { get; set; }
+        public int CurrentCP { get { return Pokemon.CP(); }  }
         public int TargetCP { get; set; }
         public int PowerUpCount { get; set; }
         public int CandyCost { get; set; }
         public int StardustCost { get; set; }
         public int Evolutions { get; set; }
 
-        public PowerUp(string name, int current, int target, int count, int candy, int stardust, int evolutions)
+        public PowerUp(Pokemon mon, int target, int count, int candy, int stardust, int evolutions)
         {
-            Name = name;
-            CurrentCP = current;
+            Pokemon = mon;
             TargetCP = target;
             PowerUpCount = count;
             CandyCost = candy;
@@ -31,32 +30,32 @@ namespace PokemonGoLib
             {
                 if (Evolutions == 0)
                 {
-                    return $"{Name} at cp{CurrentCP} is ALREADY AT THIS CP";
+                    return $"{Pokemon.Species.Name} at cp{CurrentCP} is ALREADY AT THIS CP";
 
                 }
                 else if (Evolutions == 1)
                 {
-                    return $"{Name} at cp{CurrentCP} can reach cp{TargetCP} with ONE EVOLUTION";
+                    return $"{Pokemon.Species.Name} at cp{CurrentCP} can reach cp{TargetCP} with ONE EVOLUTION";
                 }
                 else
                 {
-                    return $"{Name} at cp{CurrentCP} can reach cp{TargetCP} with {Evolutions} EVOLUTIONS";
+                    return $"{Pokemon.Species.Name} at cp{CurrentCP} can reach cp{TargetCP} with {Evolutions} EVOLUTIONS";
 
                 }
             }
             else if (Evolutions == 0)
             {
-                return $"{Name} cp{CurrentCP} can reach cp{TargetCP} with {PowerUpCount} powerups, at a cost of {StardustCost} stardust and {CandyCost} candy";
+                return $"{Pokemon.Species.Name} cp{CurrentCP} can reach cp{TargetCP} with {PowerUpCount} powerups, at a cost of {StardustCost} stardust and {CandyCost} candy";
 
             }
             else if (Evolutions == 1)
             {
 
-                return $"{Name} cp{CurrentCP} can reach cp{TargetCP} with ONE EVOLUTION AND {PowerUpCount} powerups, at a cost of {StardustCost} stardust and {CandyCost} candy (plus evolution candy)";
+                return $"{Pokemon.Species.Name} cp{CurrentCP} can reach cp{TargetCP} with ONE EVOLUTION AND {PowerUpCount} powerups, at a cost of {StardustCost} stardust and {CandyCost} candy (plus evolution candy)";
 
             }
 
-            return $"{Name} cp{CurrentCP} can reach cp{TargetCP} with {Evolutions} EVOLUTIONS AND {PowerUpCount} powerups, at a cost of {StardustCost} stardust and {CandyCost} candy (plus evolution candy)";
+            return $"{Pokemon.Species.Name} cp{CurrentCP} can reach cp{TargetCP} with {Evolutions} EVOLUTIONS AND {PowerUpCount} powerups, at a cost of {StardustCost} stardust and {CandyCost} candy (plus evolution candy)";
         }
     }
 }

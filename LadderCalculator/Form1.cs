@@ -39,7 +39,13 @@ namespace LadderCalculator
                     {
                         if(result.PowerUpCount <= numericUpDown1.Value)
                         {
-                            newNode.Nodes.Add(result.Report());
+                            if (result.Pokemon.Saved || !onlySavedCheckBox.Checked)
+                            {
+                                if (result.Pokemon.Appraised || !onlyUniqueCheckBox.Checked)
+                                {
+                                    newNode.Nodes.Add(result.Report());
+                                }
+                            }
                         }
                     }
                 }
@@ -107,6 +113,16 @@ namespace LadderCalculator
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateDisplay();
+        }
+
+        private void onlySavedCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateDisplay();
+        }
+
+        private void onlyUniqueCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             UpdateDisplay();
         }

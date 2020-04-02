@@ -13,13 +13,17 @@ namespace PokemonGoLib
         public int DefenseBonus { get; set; }
         public int StaminaBonus { get; set; }
         public double CurrentLevel { get; set; }
+        public bool Saved { get; set; }
+        public bool Appraised { get; set; }
 
-        public Pokemon(string speciesName, double level, int atk, int def, int stam)
+        public Pokemon(string speciesName, double level, int atk, int def, int stam, bool saved, bool appraised)
         {
             AttackBonus = atk;
             DefenseBonus = def;
             StaminaBonus = stam;
             CurrentLevel = level;
+            Saved = saved;
+            Appraised = appraised;
             if (Data.SpeciesData.ContainsKey(speciesName))
             {
                 Species = Data.SpeciesData[speciesName];
@@ -106,17 +110,16 @@ namespace PokemonGoLib
             }
 
             int levelUps = 0;
-            var currentCP = CP(level);
             while (level < 40.5)
             {
-                ret.Add(new PowerUp(Species.Name, currentCP, CP(level), levelUps, candy, stardust, 0));
+                ret.Add(new PowerUp(this, CP(level), levelUps, candy, stardust, 0));
                 foreach (var evo in evo1)
                 {
-                    ret.Add(new PowerUp(Species.Name, currentCP, evo.CP(level, AttackBonus, DefenseBonus, StaminaBonus), levelUps, candy, stardust, 1));
+                    ret.Add(new PowerUp(this, evo.CP(level, AttackBonus, DefenseBonus, StaminaBonus), levelUps, candy, stardust, 1));
                 }
                 foreach (var evo in evo2)
                 {
-                    ret.Add(new PowerUp(Species.Name, currentCP,  evo.CP(level, AttackBonus, DefenseBonus, StaminaBonus), levelUps, candy, stardust, 2));
+                    ret.Add(new PowerUp(this, evo.CP(level, AttackBonus, DefenseBonus, StaminaBonus), levelUps, candy, stardust, 2));
                 }
 
                 candy += Data.Levels[level].Candy;
