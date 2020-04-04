@@ -25,11 +25,11 @@ namespace LadderCalculator
         private void UpdateDisplay()
         {
 
-            LoadingForm loadingForm = new LoadingForm(3500, "Updating Display");
+            LoadingForm loadingForm = new LoadingForm((int)numericUpDown3.Value, "Updating Display");
             loadingForm.Show();
             treeView1.Nodes.Clear();
             TreeNode baseNode = new TreeNode("CP");
-            for (int cp = 10; cp < 3500; ++cp)
+            for (int cp = (int)numericUpDown2.Value; cp < (int)numericUpDown3.Value; ++cp)
             {
                 TreeNode newNode = new TreeNode(cp.ToString());
 
@@ -124,6 +124,24 @@ namespace LadderCalculator
 
         private void onlyUniqueCheckBox_CheckedChanged(object sender, EventArgs e)
         {
+            UpdateDisplay();
+        }
+
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+            if(numericUpDown2.Value > numericUpDown3.Value)
+            {
+                numericUpDown3.Value = numericUpDown2.Value;
+            }
+            UpdateDisplay();
+        }
+
+        private void numericUpDown3_ValueChanged(object sender, EventArgs e)
+        {
+            if(numericUpDown3.Value < numericUpDown2.Value)
+            {
+                numericUpDown2.Value = numericUpDown3.Value;
+            }
             UpdateDisplay();
         }
     }
